@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+
+package grpc_proto.optimizePortfolio;
+
+option java_multiple_files = true;
+option java_package = "com.xstock.grpcProto.optimizePortfolio";
+option java_outer_classname = "OptimizedPortfolio";
+option objc_class_prefix = "HLW";
+
+service OptimizePortfolio {
+  rpc Optimize (OptimizedPortfolioRequest) returns (OptimizedPortfolioResponse) {};
+}
+
+message Asset {
+  string ticker = 1;
+  repeated google.protobuf.Struct historical = 2;
+}
+
+message OptimizedPortfolioRequest {
+  repeated Asset assets = 1;
+}
+
+message WeightedAsset {
+  string ticker = 1;
+  optional float weight = 2;
+}
+
+message OptimizedPortfolioResponse {
+  repeated WeightedAsset portfolio = 1;
+}

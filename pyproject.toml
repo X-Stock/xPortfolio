@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "grpcio-tools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xstockai"
+description = "Process AI features and act as a gRPC server for xStock."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Private :: Do Not Upload",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "grpcio",
+    "protobuf",
+    "pandas",
+    "numpy",
+    "PyPortfolioOpt @ git+https://github.com/kim-minh/PyPortfolioOpt.git",
+]
+dynamic = ["version"]
+
+[project.scripts]
+xstockai = "xstockai.main:serve"

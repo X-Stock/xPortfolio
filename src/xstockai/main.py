@@ -1,4 +1,5 @@
 from concurrent import futures
+from signal import signal, SIGTERM
 
 import grpc
 
@@ -13,8 +14,16 @@ def serve():
     optimizePortfolio_pb2_grpc.add_OptimizePortfolioServicer_to_server(OptimizePortfolioServicer(), server)
     server.add_insecure_port(f"[::]:{port}")
     server.start()
-    logger.info(f"gRPC server started, listening on port {port}")
+    logger.info(f"gRPC Server started, listening on port {port}")
+
+    def handle_sigterm(*_):
+        logger.info("Shutting down gRPC server...")
+        events = server.stop(30)
+        events.wait(30)
+
+    signal(SIGTERM, handle_sigterm)
     server.wait_for_termination()
+    logger.info("gRPC Server stopped")
 
 
 if __name__ == "__main__":

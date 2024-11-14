@@ -16,7 +16,7 @@ dependencies = [
     "protobuf",
     "pandas",
     "numpy",
-    "PyPortfolioOpt @ git+https://github.com/kim-minh/PyPortfolioOpt.git",
+    "skfolio",
 ]
 dynamic = ["version"]
 

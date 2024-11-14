@@ -1,29 +1,39 @@
-from typing import OrderedDict
+import numpy as np
+import pandas as pd
 
-from pandas import DataFrame
-from pypfopt import expected_returns, risk_models, EfficientFrontier
+from skfolio import RiskMeasure
+from skfolio.optimization import MeanRisk, ObjectiveFunction
+from skfolio.preprocessing import prices_to_returns
 
+_RISK_FREE_RATE = 0
 
-def optimize_portfolio(tickers: list[str], portfolio: list[DataFrame]) -> OrderedDict[str, float]:
-    dfs = []
-    for ticker, df in zip(tickers, portfolio):
+def optimize_portfolio(historical: dict[str, pd.DataFrame]) -> dict[str, float]:
+    df_list = []
+    for ticker, df in historical.items():
         df = df.filter(['close'])
-        df.rename(columns={'close': ticker}, inplace=True)
-        dfs.append(df)
+        df = df.rename(columns={'close': ticker})
+        df_list.append(df)
 
-    cb_df = dfs[0].join(dfs[1:])
-    cb_df = cb_df.sort_index().dropna()
+    prices = df_list[0].join(df_list[1:])
+    prices = prices.sort_index().dropna()
 
-    # Calculate expected returns and sample covariance
-    mu = expected_returns.mean_historical_return(cb_df)
-    S = risk_models.sample_cov(cb_df)
+    X = prices_to_returns(prices)
+    er = np.mean(X, axis=0)
+    if (er <= _RISK_FREE_RATE).all():
+        raise ValueError("At least one of the assets must have an expected return exceeding the risk-free rate")
+    # X_train, X_test = train_test_split(X, test_size=0.33, shuffle=False)
 
-    # Optimize for maximal Sharpe ratio
-    ef = EfficientFrontier(mu, S)
-    raw_weights = ef.max_sharpe()
-    cleaned_weights = ef.clean_weights(rounding=2)
+    model = MeanRisk(
+        objective_function=ObjectiveFunction.MAXIMIZE_RATIO,
+        risk_measure=RiskMeasure.VARIANCE,
+        risk_free_rate=_RISK_FREE_RATE
+    )
+    # model.fit(X_train)
+    model.fit(X)
 
-    # ef.save_weights_to_file("weights.csv")  # saves to file
-    # ef.portfolio_performance(verbose=True)
+    # portfolio = model.predict(X_test)
+    # print(portfolio.sharpe_ratio)
 
-    return cleaned_weights
+    optimized_portfolio = {ticker: weight for ticker, weight in zip(historical.keys(), model.weights_)}
+    return optimized_portfolio
+

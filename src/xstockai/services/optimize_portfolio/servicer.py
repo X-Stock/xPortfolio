@@ -1,8 +1,6 @@
-import warnings
-
 from xstockai.grpc_proto.optimze_portfolio import optimizePortfolio_pb2_grpc, optimizePortfolio_pb2
 from xstockai.utils import logger
-from .portfolio import optimize_portfolio
+from .optimizer import optimize_portfolio
 from ...grpc_proto.optimze_portfolio.optimizePortfolio_pb2 import OptimizedPortfolioRequest
 from ...utils.preprocessing import preprocess_historical
 
@@ -13,14 +11,32 @@ class OptimizePortfolioServicer(optimizePortfolio_pb2_grpc.OptimizePortfolioServ
         historical = preprocess_historical(list(assets))
 
         try:
-            with warnings.catch_warnings():
-                warnings.filterwarnings("ignore")
-                portfolio_weights = optimize_portfolio(historical)
+            result = optimize_portfolio(historical, request.objective, request.capital)
 
-            optimized_portfolio = [optimizePortfolio_pb2.WeightedAsset(ticker=ticker, weight=weight)
-                                   for ticker, weight in portfolio_weights.items()]
+            portfolio = [
+                optimizePortfolio_pb2.WeightedAsset(
+                    ticker=data['ticker'],
+                    weight=data['weight'],
+                    shares=data['shares'],
+                    capital=data['capital']
+                ) for data in result['assets']
+            ]
+            expected_returns = result['expected_returns']
+            risk = result['risk']
+            remaining_capital = result['remaining_capital']
+
         except ValueError as e:
             logger.info(e)
-            optimized_portfolio = [optimizePortfolio_pb2.WeightedAsset(ticker=asset.ticker, weight=0.0) for asset in assets]
+            portfolio = [optimizePortfolio_pb2.WeightedAsset(ticker=asset.ticker) for asset in assets]
+            expected_returns = 0
+            risk = 0
+            remaining_capital = request.capital
 
-        return optimizePortfolio_pb2.OptimizedPortfolioResponse(portfolio=optimized_portfolio)
+        response = optimizePortfolio_pb2.OptimizedPortfolioResponse(
+            portfolio=portfolio,
+            expected_returns=expected_returns,
+            risk=risk,
+            remaining_capital=remaining_capital
+        )
+
+        return response

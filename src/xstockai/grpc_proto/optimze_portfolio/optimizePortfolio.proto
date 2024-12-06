@@ -20,13 +20,20 @@ message Asset {
 
 message OptimizedPortfolioRequest {
   repeated Asset assets = 1;
+  string objective = 2;
+  uint64 capital = 3;
 }
 
 message WeightedAsset {
   string ticker = 1;
   optional float weight = 2;
+  optional uint32 shares = 3;
+  optional uint64 capital = 4;
 }
 
 message OptimizedPortfolioResponse {
   repeated WeightedAsset portfolio = 1;
+  optional float expected_returns = 2;
+  optional float risk = 3;
+  uint64 remaining_capital = 4;
 }

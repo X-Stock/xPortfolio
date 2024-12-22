@@ -2,10 +2,10 @@ syntax = "proto3";
 
 import "google/protobuf/struct.proto";
 
-package grpc_proto.optimizePortfolio;
+package proto.optimizePortfolio;
 
 option java_multiple_files = true;
-option java_package = "com.xstock.grpcProto.optimizePortfolio";
+option java_package = "com.xstock.proto.optimizePortfolio";
 option java_outer_classname = "OptimizedPortfolio";
 option objc_class_prefix = "HLW";
 
@@ -21,19 +21,16 @@ message Asset {
 message OptimizedPortfolioRequest {
   repeated Asset assets = 1;
   string objective = 2;
-  uint64 capital = 3;
 }
 
 message WeightedAsset {
   string ticker = 1;
   optional float weight = 2;
-  optional uint32 shares = 3;
-  optional uint64 capital = 4;
 }
 
 message OptimizedPortfolioResponse {
-  repeated WeightedAsset portfolio = 1;
+  repeated WeightedAsset assets = 1;
   optional float expected_returns = 2;
   optional float risk = 3;
-  uint64 remaining_capital = 4;
+  optional float sharpe_ratio = 4;
 }

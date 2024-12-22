@@ -8,14 +8,7 @@ from skfolio.preprocessing import prices_to_returns
 _RISK_FREE_RATE = 0
 
 
-def _calculate_capital(prices: np.ndarray, total_capital: int, weighs: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    capitals = weighs * total_capital
-    shares = (((capitals // prices) // 100) * 100).astype(np.uint)
-    rounded_capitals = (shares * prices).astype(np.uint)
-    return rounded_capitals, shares
-
-
-def optimize_portfolio(historical: dict[str, pd.DataFrame], objective: str, total_capital: int) -> dict:
+def optimize_portfolio(historical: dict[str, pd.DataFrame], objective: str) -> dict:
     df_list = []
     for ticker, df in historical.items():
         df = df.filter(['close'])
@@ -54,22 +47,18 @@ def optimize_portfolio(historical: dict[str, pd.DataFrame], objective: str, tota
     # portfolio = model.predict(X_test)
 
     weights = np.round(portfolio.weights, 2)
-    capitals, total_shares = _calculate_capital(prices.iloc[-1], total_capital, weights)
-    remaining_capital = total_capital - capitals.sum()
 
     optimized_portfolio = {
         'assets': [
             {
                 'ticker': ticker,
                 'weight': weight,
-                'capital': capital,
-                'shares': shares
             }
-            for ticker, weight, shares, capital in zip(historical.keys(), weights, total_shares, capitals)
+            for ticker, weight in zip(historical.keys(), weights)
         ],
         'expected_returns': portfolio.cumulative_returns[-1],
         'risk': portfolio.variance,
-        'remaining_capital': remaining_capital
+        'sharpe_ratio': portfolio.sharpe_ratio
     }
 
     return optimized_portfolio

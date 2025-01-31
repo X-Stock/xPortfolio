@@ -1,6 +1,6 @@
-# xStock AI
+# xPortfolio
 
-Process AI features and act as a gRPC server for xStock.
+Process portfolio optimization and act as a gRPC server for xStock.
 
 # Installation
 
@@ -15,5 +15,5 @@ pip install -e .
 Run in Terminal
 
 ```bash
-xstockai
+xportfolio
 ```

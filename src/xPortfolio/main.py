@@ -3,9 +3,9 @@ from signal import signal, SIGTERM
 
 import grpc
 
-from xstockai.proto.optimze_portfolio import optimizePortfolio_pb2_grpc
-from xstockai.services.optimize_portfolio.servicer import OptimizePortfolioServicer
-from xstockai.utils import logger
+from xPortfolio.proto import optimizePortfolio_pb2_grpc
+from xPortfolio.services.optimize_portfolio.servicer import OptimizePortfolioServicer
+from xPortfolio.utils import logger
 
 
 def serve():

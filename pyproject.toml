@@ -3,8 +3,8 @@ requires = ["setuptools", "grpcio-tools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "xstockai"
-description = "Process AI features and act as a gRPC server for xStock."
+name = "xPortfolio"
+description = "Process portfolio optimization and act as a gRPC server for xStock."
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
@@ -21,4 +21,4 @@ dependencies = [
 dynamic = ["version"]
 
 [project.scripts]
-xstockai = "xstockai.main:serve"
+xportfolio = "xPortfolio.main:serve"

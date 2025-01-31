@@ -1,7 +1,7 @@
 import pandas as pd
 from google.protobuf.json_format import MessageToDict
 
-from xstockai.proto.optimze_portfolio.optimizePortfolio_pb2 import Asset
+from xPortfolio.proto.optimizePortfolio_pb2 import Asset
 
 
 def preprocess_historical(assets: list[Asset]) -> dict[str, pd.DataFrame]:

@@ -1,12 +1,12 @@
-from xstockai.proto.optimze_portfolio import optimizePortfolio_pb2_grpc, optimizePortfolio_pb2
-from xstockai.utils import logger
+from xPortfolio.proto import optimizePortfolio_pb2
+from xPortfolio.proto import optimizePortfolio_pb2_grpc
+from xPortfolio.utils import logger
 from .optimizer import optimize_portfolio
-from ...proto.optimze_portfolio.optimizePortfolio_pb2 import OptimizedPortfolioRequest
 from ...utils.preprocessing import preprocess_historical
 
 
 class OptimizePortfolioServicer(optimizePortfolio_pb2_grpc.OptimizePortfolioServicer):
-    def Optimize(self, request: OptimizedPortfolioRequest, context):
+    def Optimize(self, request: optimizePortfolio_pb2.OptimizedPortfolioRequest, context):
         assets = request.assets
         historical = preprocess_historical(list(assets))
 

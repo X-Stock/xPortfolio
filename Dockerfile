@@ -13,7 +13,7 @@ LABEL authors="kim-minh"
 EXPOSE 50051
 ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
-RUN groupadd --system --gid 1000 xstockai && useradd --system --uid 1000 --gid xstockai xstockai
-COPY --from=builder --chown=xstockai:xstockai /opt/venv /opt/venv
-USER xstockai
-ENTRYPOINT ["xstockai"]
+RUN groupadd --system --gid 1000 xPortfolio && useradd --system --uid 1000 --gid xPortfolio xPortfolio
+COPY --from=builder --chown=xPortfolio:xPortfolio /opt/venv /opt/venv
+USER xPortfolio
+ENTRYPOINT ["xportfolio"]

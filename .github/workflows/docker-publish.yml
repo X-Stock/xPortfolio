@@ -1,0 +1,18 @@
+name: Docker
+
+on:
+  release:
+    types: [released]
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      packages: write
+    uses: X-Stock/shared-workflow/.github/workflows/docker-publish.yml@main
+    with:
+      package-name: plutus

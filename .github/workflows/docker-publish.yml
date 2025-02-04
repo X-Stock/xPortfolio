@@ -13,17 +13,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup SSH Keys and known_hosts
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
-      - name: Build Docker image
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        uses: X-Stock/shared-workflow/.github/workflows/docker-publish.yml@main
-        with:
-          package-name: plutus
+    uses: X-Stock/shared-workflow/.github/workflows/docker-publish.yml@main
+    secrets: inherit
+    with:
+      package-name: xPortfolio

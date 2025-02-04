@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools", "grpcio-tools"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "xPortfolio"
-description = "Process portfolio optimization and act as a gRPC server for xStock."
+description = "Process portfolio optimization for xStock."
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
@@ -12,13 +12,14 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "grpcio",
-    "protobuf",
-    "pandas",
-    "numpy",
-    "skfolio",
+    "xstockapi @ git+ssh://git@github.com/X-Stock/xstockapi.git",
+    "pandas~=2.2.3",
+    "numpy~=2.2.2",
+    "skfolio~=0.7.0",
+    "python-dotenv~=1.0.1",
+    "pika~=1.3.2",
 ]
 dynamic = ["version"]
 
 [project.scripts]
-xportfolio = "xPortfolio.main:serve"
+xPortfolio = "xPortfolio.main:serve"

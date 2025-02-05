@@ -14,5 +14,6 @@ jobs:
       contents: read
       packages: write
     uses: X-Stock/shared-workflow/.github/workflows/docker-publish.yml@main
+    secrets: inherit
     with:
-      package-name: plutus
+      package-name: xPortfolio

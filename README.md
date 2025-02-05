@@ -1,6 +1,6 @@
 # xPortfolio
 
-Process portfolio optimization and act as a gRPC server for xStock.
+Process portfolio optimization for xStock.
 
 # Installation
 

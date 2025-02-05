@@ -1,19 +1,28 @@
-FROM python:3.12-slim AS builder
-WORKDIR /builer
-RUN python -m venv /opt/venv
+FROM python:3.13-slim AS base
 ENV PATH="/opt/venv/bin:$PATH"
-COPY pyproject.toml .
-RUN pip download .
-COPY setup.py .
-COPY src src
-RUN pip install .
 
-FROM python:3.12-slim
+FROM base AS builder
+WORKDIR /builer
+RUN <<EOF
+    apt-get update
+    apt-get install -y git
+    mkdir ~/.ssh
+    ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+EOF
+RUN python -m venv /opt/venv
+COPY pyproject.toml .
+RUN --mount=type=ssh <<EOT
+    pip install --upgrade pip
+    pip download .
+EOT
+COPY src src
+RUN --mount=type=ssh pip install .
+
+FROM base
 LABEL authors="kim-minh"
 EXPOSE 50051
-ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
-RUN groupadd --system --gid 1000 xPortfolio && useradd --system --uid 1000 --gid xPortfolio xPortfolio
+RUN groupadd --system xPortfolio && useradd --system --gid xPortfolio xPortfolio
 COPY --from=builder --chown=xPortfolio:xPortfolio /opt/venv /opt/venv
 USER xPortfolio
-ENTRYPOINT ["xportfolio"]
+ENTRYPOINT ["xPortfolio"]

@@ -1,24 +1,9 @@
 FROM python:3.13-slim AS builder
 WORKDIR /builer
-RUN --mount=type=ssh <<EOT
-  set -e
-  apt-get update && apt-get install -y git
-  echo "Setting Git SSH protocol"
-  ssh-keyscan github.com >> /root/.ssh/known_hosts
-  git config --global url."git@github.com:".insteadOf "https://github.com/"
-  (
-    set +e
-    ssh -T git@github.com
-    if [ ! "$?" = "1" ]; then
-      echo "No GitHub SSH key loaded exiting..."
-      exit 1
-    fi
-  )
-EOT
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 COPY pyproject.toml .
-RUN --mount=type=ssh pip install --upgrade pip && pip download .
+RUN --mount=type=ssh apt-get update && apt-get install -y git && pip install --upgrade pip && pip download .
 COPY src src
 RUN pip install .
 

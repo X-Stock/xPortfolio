@@ -2,7 +2,7 @@ FROM python:3.13-slim AS builder
 ENV PATH="/opt/venv/bin:$PATH"
 WORKDIR /builer
 RUN <<EOF
-    apt-get update &&
+    apt-get update
     apt-get install -y git
     mkdir ~/.ssh
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts

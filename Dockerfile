@@ -11,7 +11,7 @@ RUN python -m venv /opt/venv && pip install --upgrade pip
 COPY pyproject.toml .
 RUN --mount=type=ssh pip download .
 COPY src src
-RUN pip install .
+RUN --mount=type=ssh pip install .
 
 FROM python:3.13-slim
 LABEL authors="kim-minh"

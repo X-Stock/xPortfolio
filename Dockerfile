@@ -2,6 +2,8 @@ FROM python:3.13-slim AS builder
 WORKDIR /builer
 RUN --mount=type=ssh <<EOT
   set -e
+  apt update
+  apt install git
   echo "Setting Git SSH protocol"
   git config --global url."git@github.com:".insteadOf "https://github.com/"
   (

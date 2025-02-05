@@ -3,7 +3,7 @@ WORKDIR /builer
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 COPY pyproject.toml .
-RUN --mount=type=ssh apt-get update && apt-get install -y git && mkdir ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts && pip install --upgrade pip && pip download .
+RUN --mount=type=ssh apt-get update && apt-get install -y git && mkdir ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts && ssh-add && pip install --upgrade pip && pip download .
 COPY src src
 RUN pip install .
 

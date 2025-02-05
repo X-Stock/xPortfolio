@@ -4,6 +4,7 @@ RUN --mount=type=ssh <<EOT
   set -e
   apt-get update && apt-get install -y git
   echo "Setting Git SSH protocol"
+  ssh-keyscan github.com >> /root/.ssh/known_hosts
   git config --global url."git@github.com:".insteadOf "https://github.com/"
   (
     set +e

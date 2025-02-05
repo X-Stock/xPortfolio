@@ -3,13 +3,12 @@ WORKDIR /builer
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 COPY pyproject.toml .
-RUN apt-get update && apt-get install -y git openssh-client
+RUN apt-get update && apt-get install -y git
 RUN --mount=type=ssh <<EOT
     mkdir ~/.ssh
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-    ssh-add -l
 EOT
-RUN pip install --upgrade pip && pip download .
+RUN --mount=type=ssh pip install --upgrade pip && pip download .
 COPY src src
 RUN pip install .
 

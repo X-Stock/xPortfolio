@@ -1,14 +1,15 @@
 FROM python:3.13-slim AS builder
-WORKDIR /builer
-RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
-COPY pyproject.toml .
-RUN apt-get update && apt-get install -y git
-RUN --mount=type=ssh <<EOT
+WORKDIR /builer
+RUN <<EOF
+    apt-get update &&
+    apt-get install -y git
     mkdir ~/.ssh
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-EOT
-RUN --mount=type=ssh pip install --upgrade pip && pip download .
+EOF
+RUN python -m venv /opt/venv && pip install --upgrade pip
+COPY pyproject.toml .
+RUN --mount=type=ssh pip download .
 COPY src src
 RUN pip install .
 

@@ -1,5 +1,7 @@
-FROM python:3.13-slim AS builder
+FROM python:3.13-slim AS base
 ENV PATH="/opt/venv/bin:$PATH"
+
+FROM base AS builder
 WORKDIR /builer
 RUN <<EOF
     apt-get update
@@ -7,18 +9,20 @@ RUN <<EOF
     mkdir ~/.ssh
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 EOF
-RUN python -m venv /opt/venv && pip install --upgrade pip
+RUN python -m venv /opt/venv
 COPY pyproject.toml .
-RUN --mount=type=ssh pip download .
+RUN --mount=type=ssh <<EOT
+    pip install --upgrade pip
+    pip download .
+EOT
 COPY src src
 RUN --mount=type=ssh pip install .
 
-FROM python:3.13-slim
+FROM base
 LABEL authors="kim-minh"
 EXPOSE 50051
-ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
-RUN groupadd --system --gid 1000 xPortfolio && useradd --system --uid 1000 --gid xPortfolio xPortfolio
+RUN groupadd --system xPortfolio && useradd --system --gid xPortfolio xPortfolio
 COPY --from=builder --chown=xPortfolio:xPortfolio /opt/venv /opt/venv
 USER xPortfolio
 ENTRYPOINT ["xPortfolio"]

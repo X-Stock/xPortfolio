@@ -59,9 +59,9 @@ def optimize_portfolio(portfolio_request: dict, ) -> dict:
             }
             for ticker, weight in zip(portfolio_request['tickers'], weights)
         ],
-        'expected_returns': portfolio.cumulative_returns[-1],
+        'expectedReturns': portfolio.cumulative_returns[-1],
         'risk': portfolio.variance,
-        'sharpe_ratio': portfolio.sharpe_ratio
+        'sharpeRatio': portfolio.sharpe_ratio
     }
 
     return optimized_portfolio

@@ -1,6 +1,8 @@
 import json
+import os
 
 import pika
+from dotenv import load_dotenv
 
 from xPortfolio.algo import optimize_portfolio
 from xPortfolio.utils import logger
@@ -22,7 +24,10 @@ def on_request(ch, method, props, body):
 
 
 def serve():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    host = os.getenv('RABBITMQ_HOST', 'localhost')
+    port = int(os.getenv('RABBITMQ_PORT', 5672))
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=host, port=port))
     channel = connection.channel()
 
     exchange_name = "direct_rpc"
@@ -41,4 +46,5 @@ def serve():
 
 
 if __name__ == "__main__":
+    load_dotenv()
     serve()

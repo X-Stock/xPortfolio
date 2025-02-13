@@ -2,9 +2,7 @@ import os
 from contextlib import contextmanager
 
 import xstockapi
-from dotenv import load_dotenv
 
-load_dotenv()
 
 @contextmanager
 def api_client():

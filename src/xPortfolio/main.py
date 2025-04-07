@@ -4,7 +4,7 @@ import os
 import pika
 from dotenv import load_dotenv
 
-from xPortfolio.algo import optimize_portfolio
+from xPortfolio.algo import mpt_optimizer
 from xPortfolio.utils import logger
 
 
@@ -12,7 +12,7 @@ def on_request(ch, method, props, body):
     message = json.loads(body)
     logger.info('Received message')
 
-    response = optimize_portfolio(message)
+    response = mpt_optimizer(message)
 
     ch.basic_publish(
         exchange='',

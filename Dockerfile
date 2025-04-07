@@ -22,7 +22,7 @@ FROM base
 LABEL authors="kim-minh"
 EXPOSE 50051
 ENV PYTHONUNBUFFERED=1
-RUN groupadd --system xPortfolio && useradd --system --gid xPortfolio xPortfolio
+RUN groupadd --system xPortfolio && useradd -l --system --gid xPortfolio xPortfolio
 COPY --from=builder --chown=xPortfolio:xPortfolio /opt/venv /opt/venv
 USER xPortfolio
 ENTRYPOINT ["xPortfolio"]

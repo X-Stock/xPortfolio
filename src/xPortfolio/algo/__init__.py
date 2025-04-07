@@ -1,1 +1,1 @@
-from .optimizer import optimize_portfolio
+from .mpt import mpt_optimizer

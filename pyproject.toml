@@ -15,7 +15,7 @@ dependencies = [
     "xstockapi @ git+ssh://git@github.com/X-Stock/xstockapi.git",
     "pandas~=2.2.3",
     "numpy~=2.2.2",
-    "skfolio~=0.7.0",
+    "skfolio~=0.9.0",
     "python-dotenv~=1.0.1",
     "pika~=1.3.2",
 ]

@@ -16,7 +16,7 @@ RUN --mount=type=ssh <<EOT
     pip install .
 EOT
 COPY src src
-RUN pip install .
+RUN pip install --no-deps .
 
 FROM base
 LABEL authors="kim-minh"

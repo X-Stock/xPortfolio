@@ -5,7 +5,7 @@ FROM base AS builder
 WORKDIR /builer
 RUN <<EOF
     apt-get update
-    apt-get install -y git
+    apt-get install -y --no-install-recommends git openssh-client
     mkdir ~/.ssh
     ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 EOF
@@ -13,10 +13,10 @@ RUN python -m venv /opt/venv
 COPY pyproject.toml .
 RUN --mount=type=ssh <<EOT
     pip install --upgrade pip
-    pip download .
+    pip install .
 EOT
 COPY src src
-RUN --mount=type=ssh pip install .
+RUN pip install .
 
 FROM base
 LABEL authors="kim-minh"

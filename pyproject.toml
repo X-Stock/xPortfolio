@@ -13,7 +13,7 @@ classifiers = [
 ]
 dependencies = [
     "xstockapi @ git+ssh://git@github.com/X-Stock/xstockapi.git",
-#    "rlportfolio~=0.3.0",
+    "rlportfolio~=0.3.0",
     "pandas~=2.2.3",
     "numpy~=2.2.2",
     "skfolio~=0.9.0",
